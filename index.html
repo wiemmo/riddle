@@ -353,8 +353,8 @@
     </div>
 
     <div class="buttons hidden" id="endButtons">
-        <button class="play-again-btn" onclick="resetGame()">Ещё раз</button>
-        <button class="how-it-works-btn" onclick="showExplanation()">Как это работает</button>
+        <button class="play-again-btn" id="playAgainButton" onclick="resetGame()">Ещё раз</button>
+        <button class="how-it-works-btn hidden" id="howItWorksButton" onclick="showExplanation()">Как это работает</button>
     </div>
 
     <div class="explanation hidden" id="explanation">
@@ -456,6 +456,7 @@
         let answers = [];
         let stepOrder = []; // Порядок шагов
         const totalSteps = 7;
+        let gameCount = 0; // Счетчик игр
 
         // Числа для каждого шага (основано на степенях двойки)
         const cardNumbers = [
@@ -532,7 +533,9 @@
 
         // Сброс игры
         function resetGame() {
-            // Скрываем все элементы кроме начального сообщения и кнопки "Загадал"
+            gameCount++; // Увеличиваем счетчик игр
+            
+            // Скрываем все элементы
             document.getElementById('stepInfo').classList.add('hidden');
             document.getElementById('tilesContainer').classList.add('hidden');
             document.getElementById('question').classList.add('hidden');
@@ -587,6 +590,14 @@
                 buttons.classList.add('hidden');
                 stepInfo.classList.add('hidden');
                 document.getElementById('endButtons').classList.remove('hidden');
+                
+                // Показываем кнопку "Как это работает" только после 5 игр
+                const howItWorksButton = document.getElementById('howItWorksButton');
+                if (gameCount >= 5) {
+                    howItWorksButton.classList.remove('hidden');
+                } else {
+                    howItWorksButton.classList.add('hidden');
+                }
             }
         }
 
