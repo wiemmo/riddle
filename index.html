@@ -27,24 +27,21 @@
         }
 
         .tiles-container {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
             gap: 8px;
             margin: 20px 0;
-            perspective: 1000px;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 100%;
+            max-width: 600px;
+            width: 100%;
         }
 
         .tile {
-            width: 50px;
-            height: 70px;
+            width: 100%;
+            aspect-ratio: 3/4;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
+            transition: transform 0.3s;
             cursor: pointer;
-            margin: 3px;
-            flex-shrink: 0;
         }
 
         .tile.flipped {
@@ -92,7 +89,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.2s;
             min-width: 100px;
             touch-action: manipulation;
         }
@@ -134,17 +131,19 @@
         .play-again-btn {
             background-color: #9b59b6;
             color: white;
-            padding: 12px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            min-width: 120px;
-            touch-action: manipulation;
         }
 
         .play-again-btn:hover {
             background-color: #8e44ad;
+        }
+
+        .how-it-works-btn {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .how-it-works-btn:hover {
+            background-color: #e67e22;
         }
 
         .hidden {
@@ -166,6 +165,96 @@
             color: #333;
         }
 
+        .explanation {
+            max-width: 600px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .explanation h3 {
+            color: #3498db;
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .explanation ul {
+            padding-left: 20px;
+        }
+
+        .explanation li {
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .powers-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+
+        .powers-table th,
+        .powers-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .powers-table th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .powers-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .magic-note {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .example-box {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #27ae60;
+        }
+
+        .step-example {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .formula {
+            font-family: monospace;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
         /* Адаптация для мобильных устройств */
         @media (max-width: 768px) {
             .message {
@@ -173,10 +262,10 @@
                 padding: 0 10px;
             }
             
-            .tile {
-                width: 40px;
-                height: 60px;
-                font-size: 12px;
+            .tiles-container {
+                grid-template-columns: repeat(8, 1fr);
+                gap: 6px;
+                max-width: 90vw;
             }
             
             .tile-face {
@@ -188,15 +277,6 @@
                 font-size: 14px;
                 min-width: 80px;
             }
-            
-            .tiles-container {
-                gap: 5px;
-                margin: 15px 0;
-            }
-            
-            .tile {
-                margin: 2px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -204,9 +284,9 @@
                 font-size: 16px;
             }
             
-            .tile {
-                width: 35px;
-                height: 50px;
+            .tiles-container {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 4px;
             }
             
             .tile-face {
@@ -225,6 +305,31 @@
             
             .question {
                 font-size: 16px;
+            }
+            
+            .explanation {
+                padding: 15px;
+                margin: 15px 10px;
+            }
+            
+            .powers-table {
+                font-size: 12px;
+            }
+            
+            .powers-table th,
+            .powers-table td {
+                padding: 4px;
+            }
+            
+            .formula {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .tiles-container {
+                grid-template-columns: repeat(5, 1fr);
             }
         }
     </style>
@@ -247,7 +352,112 @@
         <button class="no-btn" onclick="answerNo()">Нет</button>
     </div>
 
-    <button class="play-again-btn hidden" id="playAgainButton" onclick="resetGame()">Ещё раз</button>
+    <div class="buttons hidden" id="endButtons">
+        <button class="play-again-btn" onclick="resetGame()">Ещё раз</button>
+        <button class="how-it-works-btn" onclick="showExplanation()">Как это работает</button>
+    </div>
+
+    <div class="explanation hidden" id="explanation">
+        <h3>Как работает магия чисел?</h3>
+        
+        <p>Это работает благодаря <span class="highlight">двоичной системе счисления</span> и <span class="highlight">степеням двойки</span>!</p>
+        
+        <h4>Степени двойки:</h4>
+        <table class="powers-table">
+            <tr>
+                <th>Шаг</th>
+                <th>Степень</th>
+                <th>Значение</th>
+                <th>Число</th>
+            </tr>
+            <tr>
+                <td>Шаг 1</td>
+                <td>2⁰</td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Шаг 2</td>
+                <td>2¹</td>
+                <td>2</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Шаг 3</td>
+                <td>2²</td>
+                <td>4</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>Шаг 4</td>
+                <td>2³</td>
+                <td>8</td>
+                <td>8</td>
+            </tr>
+            <tr>
+                <td>Шаг 5</td>
+                <td>2⁴</td>
+                <td>16</td>
+                <td>16</td>
+            </tr>
+            <tr>
+                <td>Шаг 6</td>
+                <td>2⁵</td>
+                <td>32</td>
+                <td>32</td>
+            </tr>
+            <tr>
+                <td>Шаг 7</td>
+                <td>2⁶</td>
+                <td>64</td>
+                <td>64</td>
+            </tr>
+        </table>
+        
+        <div class="example-box">
+            <h4>Принцип работы:</h4>
+            <ul>
+                <li>Каждый шаг соответствует своей степени двойки</li>
+                <li>Если вы отвечаете "Да" на шаге → прибавляем это число</li>
+                <li>Если "Нет" → не прибавляем</li>
+            </ul>
+        </div>
+        
+        <div class="step-example">
+            <h4>Пример с числом 13:</h4>
+            <p>Число 13 можно представить как сумму степеней двойки:</p>
+            <div class="formula">
+                13 = 8 + 4 + 1 = 2³ + 2² + 2⁰
+            </div>
+            <p>Значит, вы ответите "Да" на:</p>
+            <ul>
+                <li><span class="highlight">Шаг 1</span> (число 1) → Да</li>
+                <li><span class="highlight">Шаг 2</span> (число 2) → Нет</li>
+                <li><span class="highlight">Шаг 3</span> (число 4) → Да</li>
+                <li><span class="highlight">Шаг 4</span> (число 8) → Да</li>
+                <li><span class="highlight">Шаг 5</span> (число 16) → Нет</li>
+                <li><span class="highlight">Шаг 6</span> (число 32) → Нет</li>
+                <li><span class="highlight">Шаг 7</span> (число 64) → Нет</li>
+            </ul>
+            <p>Результат: 1 + 4 + 8 = <span class="highlight">13</span></p>
+        </div>
+        
+        <div class="example-box">
+            <h4>Как формируются числа:</h4>
+            <p>Каждый шаг содержит числа, которые <span class="highlight">содержат</span> соответствующую степень двойки в своей сумме:</p>
+            <ul>
+                <li><span class="highlight">Шаг 1</span> (1): все нечетные числа (1, 3, 5, 7, 9, 11, 13, ...)</li>
+                <li><span class="highlight">Шаг 2</span> (2): числа, где есть 2 (2, 3, 6, 7, 10, 11, 14, 15, ...)</li>
+                <li><span class="highlight">Шаг 3</span> (4): числа, где есть 4 (4, 5, 6, 7, 12, 13, 14, 15, ...)</li>
+            </ul>
+        </div>
+        
+        <div class="magic-note">
+            Чтобы добавить "волшебства" в этот процесс, шаги показываются в случайном порядке каждый раз!
+        </div>
+        
+        <button class="start-btn" onclick="hideExplanation()" style="margin-top: 15px;">Понятно</button>
+    </div>
 
     <script>
         let currentStep = 0;
@@ -255,15 +465,15 @@
         let stepOrder = []; // Порядок шагов
         const totalSteps = 7;
 
-        // Числа для каждой карточки (основано на двоичной системе)
+        // Числа для каждого шага (основано на степенях двойки)
         const cardNumbers = [
-            [1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71,73,75,77,79,81,83,85,87,89,91,93,95,97,99], // 1,3,5,7...
-            [2,3,6,7,10,11,14,15,18,19,22,23,26,27,30,31,34,35,38,39,42,43,46,47,50,51,54,55,58,59,62,63,66,67,70,71,74,75,78,79,82,83,86,87,90,91,94,95,98,99], // 2,3,6,7...
-            [4,5,6,7,12,13,14,15,20,21,22,23,28,29,30,31,36,37,38,39,44,45,46,47,52,53,54,55,60,61,62,63,68,69,70,71,76,77,78,79,84,85,86,87,92,93,94,95], // 4,5,6,7...
-            [8,9,10,11,12,13,14,15,24,25,26,27,28,29,30,31,40,41,42,43,44,45,46,47,56,57,58,59,60,61,62,63,72,73,74,75,76,77,78,79,88,89,90,91,92,93,94,95], // 8,9,10,11...
-            [16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95], // 16,17,18...
-            [32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,96,97,98,99], // 32,33,34...
-            [64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99] // 64,65,66...
+            [1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71,73,75,77,79,81,83,85,87,89,91,93,95,97,99], // 1
+            [2,3,6,7,10,11,14,15,18,19,22,23,26,27,30,31,34,35,38,39,42,43,46,47,50,51,54,55,58,59,62,63,66,67,70,71,74,75,78,79,82,83,86,87,90,91,94,95,98,99], // 2
+            [4,5,6,7,12,13,14,15,20,21,22,23,28,29,30,31,36,37,38,39,44,45,46,47,52,53,54,55,60,61,62,63,68,69,70,71,76,77,78,79,84,85,86,87,92,93,94,95], // 4
+            [8,9,10,11,12,13,14,15,24,25,26,27,28,29,30,31,40,41,42,43,44,45,46,47,56,57,58,59,60,61,62,63,72,73,74,75,76,77,78,79,88,89,90,91,92,93,94,95], // 8
+            [16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95], // 16
+            [32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,96,97,98,99], // 32
+            [64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99] // 64
         ];
 
         // Функция для создания случайного порядка шагов
@@ -277,15 +487,15 @@
             return order;
         }
 
-        // Создаем плитки для текущей карточки
+        // Создаем плитки для текущего шага
         function createTilesForCurrentCard() {
             const container = document.getElementById('tilesContainer');
             container.innerHTML = '';
             
-            const currentCardIndex = stepOrder[currentStep];
-            const currentNumbers = cardNumbers[currentCardIndex];
+            const currentStepIndex = stepOrder[currentStep];
+            const currentNumbers = cardNumbers[currentStepIndex];
             
-            // Создаем плитки для всех чисел текущей карточки
+            // Создаем плитки для всех чисел текущего шага
             currentNumbers.forEach(number => {
                 const tile = document.createElement('div');
                 tile.className = 'tile';
@@ -297,7 +507,7 @@
             });
         }
 
-        // Анимация переворота всех плиток
+        // Анимация переворота всех плиток (ускоренная)
         function animateAllTiles() {
             const tiles = document.querySelectorAll('.tile');
             let index = 0;
@@ -306,18 +516,19 @@
                 if (index < tiles.length) {
                     tiles[index].classList.add('flipped');
                     index++;
-                    setTimeout(flipNextTile, 80); // Уменьшена задержка для мобильных
+                    setTimeout(flipNextTile, 30); // Очень быстрая анимация
                 }
             }
 
-            setTimeout(flipNextTile, 200);
+            setTimeout(flipNextTile, 50);
         }
 
         // Начало игры
         function startGame() {
             document.getElementById('startButton').classList.add('hidden');
             document.getElementById('message').textContent = '';
-            document.getElementById('playAgainButton').classList.add('hidden');
+            document.getElementById('endButtons').classList.add('hidden');
+            document.getElementById('explanation').classList.add('hidden');
             
             // Генерируем случайный порядок шагов
             stepOrder = generateRandomOrder();
@@ -334,11 +545,24 @@
             document.getElementById('tilesContainer').classList.add('hidden');
             document.getElementById('question').classList.add('hidden');
             document.getElementById('buttons').classList.add('hidden');
-            document.getElementById('playAgainButton').classList.add('hidden');
+            document.getElementById('endButtons').classList.add('hidden');
+            document.getElementById('explanation').classList.add('hidden');
             
             // Показываем начальное сообщение и кнопку
             document.getElementById('message').textContent = 'Загадайте число от 1 до 100 и я отгадаю его за 7 шагов';
             document.getElementById('startButton').classList.remove('hidden');
+        }
+
+        // Показ объяснения
+        function showExplanation() {
+            document.getElementById('endButtons').classList.add('hidden');
+            document.getElementById('explanation').classList.remove('hidden');
+        }
+
+        // Скрытие объяснения
+        function hideExplanation() {
+            document.getElementById('explanation').classList.add('hidden');
+            document.getElementById('endButtons').classList.remove('hidden');
         }
 
         // Показ текущего шага
@@ -350,7 +574,7 @@
             const stepInfo = document.getElementById('stepInfo');
 
             if (currentStep < totalSteps) {
-                // Показываем текущую карточку
+                // Показываем текущий шаг
                 createTilesForCurrentCard();
                 
                 container.classList.remove('hidden');
@@ -370,27 +594,27 @@
                 question.classList.add('hidden');
                 buttons.classList.add('hidden');
                 stepInfo.classList.add('hidden');
-                document.getElementById('playAgainButton').classList.remove('hidden');
+                document.getElementById('endButtons').classList.remove('hidden');
             }
         }
 
         // Ответ "Да"
         function answerYes() {
-            const currentCardIndex = stepOrder[currentStep];
-            answers[currentCardIndex] = true;
+            const currentStepIndex = stepOrder[currentStep];
+            answers[currentStepIndex] = true;
             currentStep++;
             showCurrentStep();
         }
 
         // Ответ "Нет"
         function answerNo() {
-            const currentCardIndex = stepOrder[currentStep];
-            answers[currentCardIndex] = false;
+            const currentStepIndex = stepOrder[currentStep];
+            answers[currentStepIndex] = false;
             currentStep++;
             showCurrentStep();
         }
 
-        // Вычисление результата по двоичной системе
+        // Вычисление результата по степеням двойки
         function calculateResult() {
             let result = 0;
             for (let i = 0; i < answers.length; i++) {
